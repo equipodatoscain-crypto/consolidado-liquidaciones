@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#113264">
+  <title>Consolidado de Liquidaciones</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="brand-mark" aria-hidden="true">CL</div>
+      <div>
+        <p class="eyebrow">SCAIN · CONTROL FINANCIERO</p>
+        <h1>Consolidado de Liquidaciones</h1>
+        <p class="hero-copy">Seguimiento centralizado de valores, estados y novedades operativas.</p>
+      </div>
+      <div class="live-state"><span></span><strong>Datos activos</strong><small id="lastUpdate">Actualizando…</small></div>
+    </div>
+  </header>
+
+  <nav class="nav-tabs" aria-label="Módulos principales">
+    <a class="nav-tab" href="#resumen">Resumen</a>
+    <a class="nav-tab active" href="#liquidaciones">Liquidaciones</a>
+    <a class="nav-tab" href="#analisis">Análisis</a>
+    <a class="nav-tab" href="#detalle">Detalle</a>
+  </nav>
+
+  <main>
+    <section class="toolbar" aria-label="Acciones del reporte">
+      <div>
+        <p class="section-kicker">Panel operativo</p>
+        <h2>Estado general de liquidaciones</h2>
+      </div>
+      <div class="toolbar-actions">
+        <button class="btn btn-secondary" id="clearFilters" type="button">Limpiar filtros</button>
+        <button class="btn btn-export" id="exportCsv" type="button">Exportar CSV</button>
+        <button class="btn btn-primary" id="refreshData" type="button"><span>↻</span> Actualizar datos</button>
+      </div>
+    </section>
+
+    <section class="filter-card" aria-labelledby="filterTitle">
+      <div class="filter-head"><h2 id="filterTitle">Filtros del consolidado</h2><span id="resultCount">0 resultados</span></div>
+      <div class="filters">
+        <label>Desde<input id="dateFrom" type="date"></label>
+        <label>Hasta<input id="dateTo" type="date"></label>
+        <label>Unidad temporal<select id="unitFilter"><option value="">Todas las unidades</option></select></label>
+        <label>Estado<select id="statusFilter"><option value="">Todos los estados</option></select></label>
+        <label class="search-label">Buscar<input id="searchFilter" type="search" placeholder="Ruta, contrato o beneficiario…"></label>
+      </div>
+    </section>
+
+    <section class="kpi-grid" id="resumen" aria-label="Indicadores principales">
+      <article class="kpi kpi-blue"><div class="kpi-icon">$</div><div><span>Valor consolidado</span><strong id="kpiTotal">$0</strong><small>Total filtrado</small></div></article>
+      <article class="kpi kpi-green"><div class="kpi-icon">✓</div><div><span>Liquidaciones aprobadas</span><strong id="kpiApproved">0</strong><small id="kpiApprovedPct">0% del total</small></div></article>
+      <article class="kpi kpi-amber"><div class="kpi-icon">◷</div><div><span>En gestión</span><strong id="kpiPending">0</strong><small>Pendientes y en revisión</small></div></article>
+      <article class="kpi kpi-violet"><div class="kpi-icon">≡</div><div><span>Registros visibles</span><strong id="kpiRecords">0</strong><small id="kpiAverage">Promedio $0</small></div></article>
+    </section>
+
+    <section class="charts-grid" id="analisis">
+      <article class="panel chart-panel"><div class="panel-title"><div><p class="section-kicker">Distribución</p><h2>Valor por estado</h2></div><span class="pill">COP</span></div><div class="chart-wrap"><canvas id="statusChart"></canvas></div></article>
+      <article class="panel chart-panel"><div class="panel-title"><div><p class="section-kicker">Comparativo</p><h2>Valor por unidad temporal</h2></div><span class="pill">Top 6</span></div><div class="chart-wrap"><canvas id="unitChart"></canvas></div></article>
+    </section>
+
+    <section class="panel table-panel" id="detalle">
+      <div class="panel-title"><div><p class="section-kicker">Detalle consultable</p><h2>Liquidaciones consolidadas</h2></div><span class="data-mode" id="dataMode">Preparando datos</span></div>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Liquidación</th><th>Fecha</th><th>Unidad / Contrato</th><th>Ruta</th><th>Beneficiario</th><th>Concepto</th><th>Estado</th><th class="right">Valor</th></tr></thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+      <div class="empty-state" id="emptyState" hidden><strong>No encontramos liquidaciones</strong><span>Ajusta los filtros para ampliar la búsqueda.</span></div>
+      <div class="table-footer"><span id="tableSummary">Mostrando 0 registros</span><small>Actualización automática cada 5 minutos</small></div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

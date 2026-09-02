@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: consolidado-liquidaciones
+    runtime: node
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: DEMO_MODE
+        value: "true"
+      - key: DB_SERVER
+        sync: false
+      - key: DB_PORT
+        value: "1433"
+      - key: DB_NAME
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_VIEW
+        value: Vista_Resumen_Mensual_Operativo_COMPLETA
+      - key: DB_ENCRYPT
+        value: "false"
+      - key: DB_TRUST_CERTIFICATE
+        value: "true"
